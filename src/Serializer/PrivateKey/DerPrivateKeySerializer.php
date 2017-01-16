@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\PrivateKey;
 
@@ -47,9 +48,9 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
 
     /**
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::serialize()
+     * @see \Mdanter\Ecc\Serializer\PrivateKey\PrivateKeySerializerInterface::serialize()
      */
-    public function serialize(PrivateKeyInterface $key)
+    public function serialize(PrivateKeyInterface $key): string
     {
         $privateKeyInfo = new Sequence(
             new Integer(self::VERSION),
@@ -65,7 +66,7 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
      * @param PrivateKeyInterface $key
      * @return BitString
      */
-    private function encodePubKey(PrivateKeyInterface $key)
+    private function encodePubKey(PrivateKeyInterface $key): BitString
     {
         return new BitString(
             $this->pubKeySerializer->getUncompressedKey($key->getPublicKey())
@@ -76,18 +77,17 @@ class DerPrivateKeySerializer implements PrivateKeySerializerInterface
      * @param PrivateKeyInterface $key
      * @return string
      */
-    private function formatKey(PrivateKeyInterface $key)
+    private function formatKey(PrivateKeyInterface $key): string
     {
         return gmp_strval($key->getSecret(), 16);
     }
 
     /**
-     * @param string $data
      * {@inheritDoc}
-     * @see \Mdanter\Ecc\Serializer\PrivateKeySerializerInterface::parse()
+     * @see \Mdanter\Ecc\Serializer\PrivateKey\PrivateKeySerializerInterface::parse()
      * @throws \FG\ASN1\Exception\ParserException
      */
-    public function parse($data)
+    public function parse(string $data): PrivateKeyInterface
     {
         $asnObject = Object::fromBinary($data);
 

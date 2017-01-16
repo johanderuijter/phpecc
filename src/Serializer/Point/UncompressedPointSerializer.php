@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mdanter\Ecc\Serializer\Point;
 
@@ -27,7 +28,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
      * @param PointInterface $point
      * @return string
      */
-    public function serialize(PointInterface $point)
+    public function serialize(PointInterface $point): string
     {
         $length = CurveOidMapper::getByteSize($point->getCurve()) * 2;
 
@@ -43,7 +44,7 @@ class UncompressedPointSerializer implements PointSerializerInterface
      * @param string           $data
      * @return PointInterface
      */
-    public function unserialize(CurveFpInterface $curve, $data)
+    public function unserialize(CurveFpInterface $curve, string $data): PointInterface
     {
         if (BinaryString::substring($data, 0, 2) != '04') {
             throw new \InvalidArgumentException('Invalid data: only uncompressed keys are supported.');
